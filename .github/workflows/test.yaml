@@ -56,8 +56,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=digital-commerce:users_v0
+            -Dsonar.organization=dalvincodes
 
-#     Snyk - https://github.com/snyk/cli
+      #     Snyk - https://github.com/snyk/cli
       - name: Snyk - Vulnerability Scanner
         uses: snyk/actions/golang@master
         continue-on-error: true # To make sure that SARIF upload gets called
