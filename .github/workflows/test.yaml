@@ -21,7 +21,7 @@ jobs:
         run: go get .
 
       - name: Run GO Tests
-        run: go test . -v
+        run: go test ./... -v
 
 
   security:
@@ -37,9 +37,9 @@ jobs:
 
       - name: Install Dependencies
         run: go get .
-
-      - name: Scan Dependencies for Vulnerabilities
-        uses: actions/dependency-review-action@v1
+#
+#      - name: Scan Dependencies for Vulnerabilities
+#        uses: actions/dependency-review-action@v1
 
 #      Run DevSkim for Vulnerabilities - https://github.com/Microsoft/DevSkim
       - name: Run DevSkim scanner
