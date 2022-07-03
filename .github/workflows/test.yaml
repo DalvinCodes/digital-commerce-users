@@ -58,7 +58,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=digital-commerce:users_v0
+            -Dsonar.projectKey=DalvinCodes_digital-commerce-users
             -Dsonar.organization=dalvincodes
 
       #     Snyk - https://github.com/snyk/cli

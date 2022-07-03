@@ -166,7 +166,7 @@ func (s *UserTestSuite) createRandomUserInDB(user *model.User) {
 
 	s.Mock.ExpectExec(regexp.QuoteMeta(userQuery)).
 		WithArgs(
-			user.ID, user.Username, user.FirstName,
+			1, user.Username, user.FirstName,
 			user.LastName, user.Email, user.DateOfBirth, user.CreatedAt, user.UpdatedAt, user.DeletedAt).
 		WillReturnResult(
 			sqlmock.NewResult(0, 1))
