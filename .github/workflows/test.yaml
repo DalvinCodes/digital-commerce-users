@@ -2,6 +2,7 @@ name: Test Code and Publish Report
 
 on:
   - push
+  - pull_request
   - workflow_call
 
 jobs:
@@ -22,8 +23,6 @@ jobs:
       - name: Run GO Tests
         run: go test . -v
 
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v1
 
   security:
     runs-on: ubuntu-22.04
@@ -38,6 +37,9 @@ jobs:
 
       - name: Install Dependencies
         run: go get .
+
+      - name: Scan Dependencies for Vulnerabilities
+        uses: actions/dependency-review-action@v1
 
 #      Run DevSkim for Vulnerabilities - https://github.com/Microsoft/DevSkim
       - name: Run DevSkim scanner
