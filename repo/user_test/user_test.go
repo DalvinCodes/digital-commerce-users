@@ -147,14 +147,41 @@ func (s *UserTestSuite) TestUser_Delete() {
 	//Given
 	user := s.SeedUser()
 	s.createRandomUserInDB(user)
-	userQuery := `DELETE FROM "users" WHERE "users"."id" = $1`
+	deleteUserQuery := `DELETE FROM "users" WHERE "users"."id" = $1`
 
 	//When
-	s.Mock.ExpectExec(regexp.QuoteMeta(userQuery)).WithArgs(user.ID).WillReturnResult(sqlmock.NewResult(0, 1))
+	s.Mock.ExpectExec(regexp.QuoteMeta(deleteUserQuery)).WithArgs(user.ID).WillReturnResult(sqlmock.NewResult(0, 1))
 	err := s.Repo.Delete(context.Background(), user)
+	s.Require().NoError(err)
+
+	const getUserQuery = `SELECT * FROM "users" WHERE id = $1`
+
+	var rows sqlmock.Rows
+
+	s.Mock.ExpectQuery(regexp.QuoteMeta(getUserQuery)).WithArgs(user.ID).WillReturnRows(&rows)
+	user, err = s.Repo.FindByID(context.Background(), user.ID)
+	s.Require().NoError(err)
+
+	//Then
+	s.Require().Empty(user)
+	errExpectations := s.Mock.ExpectationsWereMet()
+	s.Require().Nil(errExpectations)
+}
+
+func (s *UserTestSuite) TestUser_FindByIDReturnsNoUserFoundError() {
+	//Given
+	const findUserQuery = `SELECT * FROM "users" WHERE id = $1`
+	queryUser := s.SeedUser()
+
+	//When
+	var rows sqlmock.Rows
+	s.Mock.ExpectQuery(regexp.QuoteMeta(findUserQuery)).WithArgs(queryUser.ID).WillReturnRows(&rows)
+	user, err := s.Repo.FindByID(context.Background(), queryUser.ID)
 
 	//Then
 	s.Require().Nil(err)
+	s.Require().Empty(user)
+
 	errExpectations := s.Mock.ExpectationsWereMet()
 	s.Require().Nil(errExpectations)
 }
