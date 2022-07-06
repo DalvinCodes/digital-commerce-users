@@ -25,7 +25,7 @@ func (s *UserTestSuite) TestUser_NewRepository() {
 
 func (s *UserTestSuite) TestUser_Create() {
 	//Given
-	user := s.SeedUser()
+	user := s.SeedMockUserData()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
 	const userQuery = `INSERT INTO "users" ("id","username","first_name","last_name","email","dob","created_at","updated_at","deleted_at") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`
@@ -84,7 +84,7 @@ func (s *UserTestSuite) TestUser_ListAll_ReturnsError() {
 func (s *UserTestSuite) TestUser_FindByID() {
 	//Given
 	const userQuery = `SELECT * FROM "users" WHERE id = $1`
-	user := s.SeedUser()
+	user := s.SeedMockUserData()
 
 	s.createRandomUserInDB(user)
 
@@ -105,7 +105,7 @@ func (s *UserTestSuite) TestUser_FindByID() {
 func (s *UserTestSuite) TestUser_FindByID_ReturnsError() {
 	//Given
 	const userQuery = `SELECT * FROM "users" WHERE id = $1`
-	obj := s.SeedUser()
+	obj := s.SeedMockUserData()
 
 	//When
 	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).
@@ -125,7 +125,7 @@ func (s *UserTestSuite) TestUser_FindByID_ReturnsError() {
 func (s *UserTestSuite) TestUser_Update() {
 	//Given
 	const userQuery = `UPDATE "users" SET "username"=$1,"first_name"=$2,"last_name"=$3,"email"=$4,"dob"=$5,"updated_at"=$6 WHERE "id" = $7`
-	user := s.SeedUser()
+	user := s.SeedMockUserData()
 	user.UpdatedAt = time.Now()
 
 	//When
@@ -145,7 +145,7 @@ func (s *UserTestSuite) TestUser_Update() {
 
 func (s *UserTestSuite) TestUser_Delete() {
 	//Given
-	user := s.SeedUser()
+	user := s.SeedMockUserData()
 	s.createRandomUserInDB(user)
 	deleteUserQuery := `DELETE FROM "users" WHERE "users"."id" = $1`
 
@@ -171,7 +171,7 @@ func (s *UserTestSuite) TestUser_Delete() {
 func (s *UserTestSuite) TestUser_FindByIDReturnsNoUserFoundError() {
 	//Given
 	const findUserQuery = `SELECT * FROM "users" WHERE id = $1`
-	queryUser := s.SeedUser()
+	queryUser := s.SeedMockUserData()
 
 	//When
 	var rows sqlmock.Rows

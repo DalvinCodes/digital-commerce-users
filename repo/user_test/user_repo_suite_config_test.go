@@ -58,7 +58,7 @@ func (s *UserTestSuite) SetupSuite() {
 	s.T().Log("User Test Suite setup is successful.")
 }
 
-func (s *UserTestSuite) SeedUser() *model.User {
+func (s *UserTestSuite) SeedMockUserData() *model.User {
 	user := s.User
 	user.ID = gofakeit.UUID()
 	user.Username = gofakeit.Username()
@@ -70,9 +70,9 @@ func (s *UserTestSuite) SeedUser() *model.User {
 	return &user
 }
 
-func (s *UserTestSuite) SeedUserList() {
+func (s *UserTestSuite) SeedMockUserListData() {
 	for i := 0; i < 10; i++ {
-		user := s.SeedUser()
+		user := s.SeedMockUserData()
 		s.UserList = append(s.UserList, user)
 	}
 }
