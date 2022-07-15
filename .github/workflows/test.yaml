@@ -21,11 +21,12 @@ jobs:
         run: go get .
 
       - name: Run GO Tests
-        run: go test ./... -v
+        run: go test ./... -json > report.json -v -coverprofile=coverage.out
 
 
   security:
     runs-on: ubuntu-22.04
+    needs: test
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v3
