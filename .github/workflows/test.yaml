@@ -61,6 +61,7 @@ jobs:
           args: >
             -Dsonar.projectKey=DalvinCodes_digital-commerce-users
             -Dsonar.organization=dalvincodes
+            -Dsonar.go.coverage.reportPaths=.
 
       #     Snyk - https://github.com/snyk/cli
       - name: Snyk - Vulnerability Scanner
