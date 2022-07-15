@@ -21,7 +21,7 @@ jobs:
         run: go get .
 
       - name: Run GO Tests
-        run: go test ./... -json > test-report.out -v -coverprofile=coverage.out
+        run: go test ./... -json > test-report.json -v -coverprofile=coverage.out
 
 
   security:
@@ -61,8 +61,8 @@ jobs:
           args: >
             -Dsonar.projectKey=DalvinCodes_digital-commerce-users
             -Dsonar.organization=dalvincodes
-            -Dsonar.go.coverage.reportPaths=.
-            -Dsonar.go.tests.reportPaths=.
+            -Dsonar.go.coverage.reportPaths=coverage.out
+            -Dsonar.go.tests.reportPaths=test-report.json
 
       #     Snyk - https://github.com/snyk/cli
       - name: Snyk - Vulnerability Scanner
