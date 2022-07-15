@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/DalvinCodes/digital-commerce/users/model"
-	"github.com/DalvinCodes/digital-commerce/users/repo"
+
 	"gorm.io/gorm"
 	"regexp"
 	"time"
@@ -16,8 +16,8 @@ func (s *UserTestSuite) TestUser_NewRepository() {
 	var gormDB *gorm.DB
 
 	//When
-	got := repo.NewUserRepository(gormDB)
-	want := repo.NewUserRepository(gormDB)
+	got := NewUserRepository(gormDB)
+	want := NewUserRepository(gormDB)
 
 	//Then
 	s.Require().Equalf(got, want, "Got %v : Want: %v ", got, want)

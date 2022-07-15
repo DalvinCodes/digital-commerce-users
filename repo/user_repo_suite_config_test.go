@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/DalvinCodes/digital-commerce/users/model"
-	"github.com/DalvinCodes/digital-commerce/users/repo"
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"
@@ -14,7 +13,7 @@ import (
 
 type UserTestSuite struct {
 	suite.Suite
-	Repo     repo.UserRepo
+	Repo     UserRepo
 	Mock     sqlmock.Sqlmock
 	DB       *sql.DB
 	User     model.User
@@ -24,7 +23,7 @@ type UserTestSuite struct {
 func (s *UserTestSuite) SetupSuite() {
 	s.T().Log("Setting Up User Test Suite.")
 
-	//Setting up Mock DB and Mock Test Expectation Suite
+	// Setting up Mock DB and Mock Test Expectation Suite
 	var db *sql.DB
 	var err error
 
@@ -34,7 +33,7 @@ func (s *UserTestSuite) SetupSuite() {
 		s.FailNow(err.Error())
 	}
 
-	//selecting postgres as base DB provider -- dummy DSN
+	// selecting postgres as base DB provider -- dummy DSN
 	dialector := postgres.New(postgres.Config{
 		DSN:        "sqlmock_db_0",
 		DriverName: "postgres",
@@ -48,7 +47,7 @@ func (s *UserTestSuite) SetupSuite() {
 		s.FailNow(err.Error())
 	}
 
-	s.Repo.Db = gormDB
+	s.Repo.DB = gormDB
 
 	s.DB, err = gormDB.DB()
 	if err != nil {

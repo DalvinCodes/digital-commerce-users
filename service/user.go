@@ -8,6 +8,7 @@ import (
 
 type UserServiceI interface {
 	Create(ctx context.Context, user *model.User) error
+	ListAll(ctx context.Context) ([]*model.User, error)
 }
 
 type UserService struct {
@@ -19,5 +20,9 @@ func NewUser(repo repo.UserRepository) *UserService {
 }
 
 func (s *UserService) Create(ctx context.Context, user *model.User) error {
-	return nil
+	return s.Repo.Create(ctx, user)
+}
+
+func (s *UserService) ListAll(ctx context.Context) ([]*model.User, error) {
+	return s.Repo.ListAll(ctx)
 }
