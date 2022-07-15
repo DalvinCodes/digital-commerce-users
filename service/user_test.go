@@ -48,3 +48,18 @@ func (s *UserServiceTestSuite) TestListAll() {
 	s.Require().NoError(err)
 	s.Require().Equal(len(want), len(users))
 }
+
+func (s *UserServiceTestSuite) TestFindByID() {
+	// Given
+	want := s.SeedMockUserData()
+
+	// When
+	s.Repo.On("FindByID", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("string")).
+		Return(want, nil).Once()
+
+	got, err := s.Service.FindByID(context.Background(), want.ID)
+
+	// Then
+	s.Require().NoError(err)
+	s.Require().Equal(want, got)
+}
