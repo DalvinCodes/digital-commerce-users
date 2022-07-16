@@ -251,6 +251,25 @@ func (s *UserTestSuite) TestUserRepo_FindByEmail() {
 	s.Require().Nil(err)
 }
 
+func (s *UserTestSuite) TestUserRepo_FindByEmail_ReturnsError() {
+	// Given
+	const userQuery = `SELECT * FROM "users" WHERE email = $1`
+	user := s.SeedMockUserData()
+
+	// When
+	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).
+		WithArgs(user.Email).
+		WillReturnError(errors.New("unable to find user"))
+
+	dbUser, err := s.Repo.FindByEmail(context.Background(), user.Email)
+
+	s.Require().Error(err)
+	s.Require().Empty(dbUser)
+
+	err = s.Mock.ExpectationsWereMet()
+	s.Require().Nil(err)
+}
+
 func (s *UserTestSuite) createUserList() (users []*model.User) {
 	for i := 0; i < 5; i++ {
 		users = append(users, s.SeedMockUserData())

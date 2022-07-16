@@ -12,6 +12,7 @@ type UserServiceI interface {
 	FindByID(ctx context.Context, id string) (*model.User, error)
 	FindByUsername(ctx context.Context, username string) (*model.User, error)
 	FindByEmail(ctx context.Context, email string) (*model.User, error)
+	Delete(ctx context.Context, user *model.User) error
 }
 
 type UserService struct {
@@ -39,5 +40,9 @@ func (s *UserService) FindByUsername(ctx context.Context, username string) (*mod
 }
 
 func (s *UserService) FindByEmail(ctx context.Context, email string) (*model.User, error) {
-	return nil, nil
+	return s.Repo.FindByEmail(ctx, email)
+}
+
+func (s *UserService) Delete(ctx context.Context, user *model.User) error {
+	return s.Repo.Delete(ctx, user)
 }

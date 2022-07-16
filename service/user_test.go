@@ -73,8 +73,38 @@ func (s *UserServiceTestSuite) TestUserService_FindByUsername() {
 		Return(want, nil).Once()
 
 	got, err := s.Service.FindByUsername(context.Background(), want.Username)
-	
+
 	// Then
 	s.Require().NoError(err)
 	s.Require().Equal(want, got)
+}
+
+func (s *UserServiceTestSuite) TestUserService_FindByEmail() {
+	// Given
+	want := s.SeedMockUserData()
+
+	// When
+	s.Repo.On("FindByEmail", mock.AnythingOfType("*context.emptyCtx"), want.Email).
+		Return(want, nil).Once()
+
+	dbUser, err := s.Service.FindByEmail(context.Background(), want.Email)
+
+	// Then
+	s.Require().NoError(err)
+	s.Require().Equal(want, dbUser)
+}
+
+func (s *UserServiceTestSuite) TestUserService_Delete() {
+	// Given
+	want := s.SeedMockUserData()
+
+	// When
+	s.Repo.On("Delete", mock.AnythingOfType("*context.emptyCtx"), want).
+		Return(nil).
+		Once()
+
+	err := s.Service.Delete(context.Background(), want)
+
+	// Then
+	s.Require().Nil(err)
 }
