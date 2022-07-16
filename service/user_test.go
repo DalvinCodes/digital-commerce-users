@@ -106,5 +106,20 @@ func (s *UserServiceTestSuite) TestUserService_Delete() {
 	err := s.Service.Delete(context.Background(), want)
 
 	// Then
-	s.Require().Nil(err)
+	s.Require().NoError(err)
+}
+
+func (s *UserServiceTestSuite) TestUserService_Update() {
+	// Given
+	mockUser := s.SeedMockUserData()
+
+	// When
+	s.Repo.On("Update", context.Background(), mockUser).
+		Return(nil).
+		Once()
+
+	err := s.Service.Update(context.Background(), mockUser)
+
+	// Then
+	s.Require().NoError(err)
 }
