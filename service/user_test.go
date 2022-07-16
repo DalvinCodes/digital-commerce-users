@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func (s *UserServiceTestSuite) TestCreate_Constructor() {
+func (s *UserServiceTestSuite) TestUserService_CreateConstructor() {
 	// Given
 	want := &UserService{Repo: &s.Repo}
 
@@ -17,7 +17,7 @@ func (s *UserServiceTestSuite) TestCreate_Constructor() {
 	s.Require().Equal(want, got)
 }
 
-func (s *UserServiceTestSuite) TestCreate_SuccessfulCreate() {
+func (s *UserServiceTestSuite) TestUserService_Create_Successful() {
 	// Given
 	mockUser := s.SeedMockUserData()
 
@@ -30,7 +30,7 @@ func (s *UserServiceTestSuite) TestCreate_SuccessfulCreate() {
 	s.Require().NoError(err)
 }
 
-func (s *UserServiceTestSuite) TestListAll() {
+func (s *UserServiceTestSuite) TestUserService_ListAll() {
 	// Given
 	var want []*model.User
 
@@ -49,16 +49,31 @@ func (s *UserServiceTestSuite) TestListAll() {
 	s.Require().Equal(len(want), len(users))
 }
 
-func (s *UserServiceTestSuite) TestFindByID() {
+func (s *UserServiceTestSuite) TestUserService_FindByID() {
 	// Given
 	want := s.SeedMockUserData()
 
 	// When
-	s.Repo.On("FindByID", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("string")).
+	s.Repo.On("FindByID", mock.AnythingOfType("*context.emptyCtx"), want.ID).
 		Return(want, nil).Once()
 
 	got, err := s.Service.FindByID(context.Background(), want.ID)
 
+	// Then
+	s.Require().NoError(err)
+	s.Require().Equal(want, got)
+}
+
+func (s *UserServiceTestSuite) TestUserService_FindByUsername() {
+	// Given
+	want := s.SeedMockUserData()
+
+	// When
+	s.Repo.On("FindByUsername", mock.AnythingOfType("*context.emptyCtx"), want.Username).
+		Return(want, nil).Once()
+
+	got, err := s.Service.FindByUsername(context.Background(), want.Username)
+	
 	// Then
 	s.Require().NoError(err)
 	s.Require().Equal(want, got)

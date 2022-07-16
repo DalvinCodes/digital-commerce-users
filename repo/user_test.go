@@ -9,7 +9,7 @@ import (
 	"regexp"
 )
 
-func (s *UserTestSuite) TestUserService_NewRepository() {
+func (s *UserTestSuite) TestUserRepo_NewRepository() {
 	// Given
 	var gormDB *gorm.DB
 
@@ -21,7 +21,7 @@ func (s *UserTestSuite) TestUserService_NewRepository() {
 	s.Require().Equalf(got, want, "Got %v : Want: %v ", got, want)
 }
 
-func (s *UserTestSuite) TestUserService_Create() {
+func (s *UserTestSuite) TestUserRepo_Create() {
 	// Given
 	user := s.SeedMockUserData()
 	const userQuery = `INSERT INTO "users" ("id","username","first_name","last_name","email","dob","created_at","updated_at","deleted_at") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING "id"`
@@ -44,7 +44,7 @@ func (s *UserTestSuite) TestUserService_Create() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_ListAll() {
+func (s *UserTestSuite) TestUserRepo_ListAll() {
 	// Given
 	const userQuery = `SELECT * FROM "users" WHERE "users"."deleted_at" IS NULL`
 
@@ -72,7 +72,7 @@ func (s *UserTestSuite) TestUserService_ListAll() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_ListAll_ReturnsError() {
+func (s *UserTestSuite) TestUserRepo_ListAll_ReturnsError() {
 	// Given
 	const userQuery = `SELECT * FROM "users"`
 
@@ -89,7 +89,7 @@ func (s *UserTestSuite) TestUserService_ListAll_ReturnsError() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_FindByID() {
+func (s *UserTestSuite) TestUserRepo_FindByID() {
 	// Given
 	const userQuery = `SELECT * FROM "users" WHERE id = $1`
 	mockUser := s.SeedMockUserData()
@@ -110,7 +110,7 @@ func (s *UserTestSuite) TestUserService_FindByID() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_FindByID_ReturnsError() {
+func (s *UserTestSuite) TestUserRepo_FindByID_ReturnsError() {
 	// Given
 	const userQuery = `SELECT * FROM "users" WHERE id = $1`
 	obj := s.SeedMockUserData()
@@ -130,7 +130,7 @@ func (s *UserTestSuite) TestUserService_FindByID_ReturnsError() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_Update() {
+func (s *UserTestSuite) TestUserRepo_Update() {
 	// Given
 	const userQuery = `UPDATE "users" SET "username"=$1,"first_name"=$2,"last_name"=$3,"email"=$4,"dob"=$5,"updated_at"=$6 WHERE "users"."deleted_at" IS NULL AND "id" = $7`
 	user := s.SeedMockUserData()
@@ -150,7 +150,7 @@ func (s *UserTestSuite) TestUserService_Update() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_Delete() {
+func (s *UserTestSuite) TestUserRepo_Delete() {
 	// Given
 	user := s.SeedMockUserData()
 	deleteUserQuery := `UPDATE "users" SET "deleted_at"=$1 WHERE "users"."id" = $2 AND "users"."deleted_at" IS NULL`
@@ -170,7 +170,7 @@ func (s *UserTestSuite) TestUserService_Delete() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_FindByIDReturnsNoUserFoundError() {
+func (s *UserTestSuite) TestUserRepo_FindByIDReturnsNoUserFoundError() {
 	// Given
 	const findUserQuery = `SELECT * FROM "users" WHERE id = $1`
 	queryUser := s.SeedMockUserData()
@@ -189,7 +189,7 @@ func (s *UserTestSuite) TestUserService_FindByIDReturnsNoUserFoundError() {
 	s.Require().Nil(errExpectations)
 }
 
-func (s *UserTestSuite) TestUserService_FindByUsername() {
+func (s *UserTestSuite) TestUserRepo_FindByUsername() {
 	// Given
 	const userQuery = `SELECT * FROM "users" WHERE username = $1 AND "users"."deleted_at" IS NULL`
 	user := s.SeedMockUserData()
@@ -211,7 +211,7 @@ func (s *UserTestSuite) TestUserService_FindByUsername() {
 	s.Require().NoError(err)
 }
 
-func (s *UserTestSuite) TestUserService_FindByUsername_ReturnsError() {
+func (s *UserTestSuite) TestUserRepo_FindByUsername_ReturnsError() {
 	// Given
 	const userQuery = `SELECT * FROM "users" WHERE username = $1 AND "users"."deleted_at" IS NULL`
 	user := s.SeedMockUserData()
