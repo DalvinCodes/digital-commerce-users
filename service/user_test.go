@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/DalvinCodes/digital-commerce/users/model"
+	"github.com/gofiber/fiber/v2/utils"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -122,4 +123,34 @@ func (s *UserServiceTestSuite) TestUserService_Update() {
 
 	// Then
 	s.Require().NoError(err)
+}
+
+func (s *UserServiceTestSuite) TestUserService_UpdateUsername() {
+	// Given
+	mockUser := &model.User{ID: utils.UUIDv4(), Username: "TestUsername"}
+
+	// When
+	s.Repo.On("Update", context.Background(), mockUser).
+		Return(nil).
+		Once()
+
+	err := s.Service.UpdateUsername(context.Background(), mockUser.ID, mockUser.Username)
+
+	// Then
+	s.Require().NoError(err)
+}
+
+func (s *UserServiceTestSuite) TestUserService_UpdateEmail() {
+	// Given
+	mockUser := &model.User{ID: utils.UUIDv4(), Email: "test_email@test.com"}
+
+	// When
+	s.Repo.On("Update", context.Background(), mockUser).
+		Return(nil).
+		Once()
+
+	err := s.Service.UpdateEmail(context.Background(), mockUser.ID, mockUser.Email)
+
+	// Then
+	s.Require().Empty(err)
 }

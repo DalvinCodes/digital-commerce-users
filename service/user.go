@@ -14,6 +14,8 @@ type UserServiceI interface {
 	FindByEmail(ctx context.Context, email string) (*model.User, error)
 	ListAll(ctx context.Context) ([]*model.User, error)
 	Update(ctx context.Context, user *model.User) error
+	UpdateUsername(ctx context.Context, userID, username string) error
+	UpdateEmail(ctx context.Context, userID, email string) error
 }
 
 type UserService struct {
@@ -49,5 +51,23 @@ func (s *UserService) Delete(ctx context.Context, user *model.User) error {
 }
 
 func (s *UserService) Update(ctx context.Context, user *model.User) error {
+	return s.Repo.Update(ctx, user)
+}
+
+func (s *UserService) UpdateUsername(ctx context.Context, userID, username string) error {
+	user := &model.User{}
+
+	user.ID = userID
+	user.Username = username
+
+	return s.Repo.Update(ctx, user)
+}
+
+func (s *UserService) UpdateEmail(ctx context.Context, userID, email string) error {
+	user := &model.User{}
+
+	user.ID = userID
+	user.Email = email
+
 	return s.Repo.Update(ctx, user)
 }
