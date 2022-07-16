@@ -230,6 +230,27 @@ func (s *UserTestSuite) TestUserRepo_FindByUsername_ReturnsError() {
 	s.Require().NoError(err)
 }
 
+func (s *UserTestSuite) TestUserRepo_FindByEmail() {
+	// Given
+	const userQuery = `SELECT * FROM "users" WHERE email = $1 AND "users"."deleted_at" IS NULL`
+	user := s.SeedMockUserData()
+
+	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "last_name", "email", "dob"}).
+		AddRow(user.ID, user.Username, user.FirstName, user.LastName, user.Email, user.DateOfBirth)
+
+	// When
+	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).
+		WithArgs(user.Email).
+		WillReturnRows(rows)
+
+	dbUser, err := s.Repo.FindByEmail(context.Background(), user.Email)
+	s.Require().NoError(err)
+
+	s.Require().Equal(user, dbUser)
+	err = s.Mock.ExpectationsWereMet()
+	s.Require().Nil(err)
+}
+
 func (s *UserTestSuite) createUserList() (users []*model.User) {
 	for i := 0; i < 5; i++ {
 		users = append(users, s.SeedMockUserData())

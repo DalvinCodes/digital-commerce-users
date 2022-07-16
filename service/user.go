@@ -11,6 +11,7 @@ type UserServiceI interface {
 	ListAll(ctx context.Context) ([]*model.User, error)
 	FindByID(ctx context.Context, id string) (*model.User, error)
 	FindByUsername(ctx context.Context, username string) (*model.User, error)
+	FindByEmail(ctx context.Context, email string) (*model.User, error)
 }
 
 type UserService struct {
@@ -35,4 +36,8 @@ func (s *UserService) FindByID(ctx context.Context, id string) (*model.User, err
 
 func (s *UserService) FindByUsername(ctx context.Context, username string) (*model.User, error) {
 	return s.Repo.FindByUsername(ctx, username)
+}
+
+func (s *UserService) FindByEmail(ctx context.Context, email string) (*model.User, error) {
+	return nil, nil
 }

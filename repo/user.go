@@ -11,6 +11,7 @@ type UserRepository interface {
 	ListAll(ctx context.Context) ([]*model.User, error)
 	FindByID(ctx context.Context, id string) (*model.User, error)
 	FindByUsername(ctx context.Context, username string) (*model.User, error)
+	FindByEmail(ctx context.Context, email string) (*model.User, error)
 	Update(ctx context.Context, user *model.User) error
 	Delete(ctx context.Context, user *model.User) error
 }
@@ -22,6 +23,7 @@ type UserRepo struct {
 const (
 	idIs       = `id = ?`
 	usernameIs = `username = ?`
+	emailIs    = `email = ?`
 )
 
 func NewUserRepository(db *gorm.DB) *UserRepo {
@@ -64,6 +66,18 @@ func (r *UserRepo) FindByUsername(ctx context.Context, username string) (*model.
 
 	if err := r.DB.Debug().WithContext(ctx).
 		Where(usernameIs, username).
+		Find(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *UserRepo) FindByEmail(ctx context.Context, email string) (*model.User, error) {
+	var user model.User
+
+	if err := r.DB.WithContext(ctx).
+		Where(emailIs, email).
 		Find(&user).Error; err != nil {
 		return nil, err
 	}
