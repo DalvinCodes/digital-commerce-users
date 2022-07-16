@@ -65,6 +65,29 @@ func (_m *UserRepository) FindByID(ctx context.Context, id string) (*model.User,
 	return r0, r1
 }
 
+// FindByUsername provides a mock function with given fields: ctx, username
+func (_m *UserRepository) FindByUsername(ctx context.Context, username string) (*model.User, error) {
+	ret := _m.Called(ctx, username)
+
+	var r0 *model.User
+	if rf, ok := ret.Get(0).(func(context.Context, string) *model.User); ok {
+		r0 = rf(ctx, username)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.User)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, username)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ListAll provides a mock function with given fields: ctx
 func (_m *UserRepository) ListAll(ctx context.Context) ([]*model.User, error) {
 	ret := _m.Called(ctx)

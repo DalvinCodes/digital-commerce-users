@@ -13,11 +13,9 @@ import (
 
 type UserTestSuite struct {
 	suite.Suite
-	Repo     UserRepo
-	Mock     sqlmock.Sqlmock
-	DB       *sql.DB
-	User     model.User
-	UserList []*model.User
+	Repo UserRepo
+	Mock sqlmock.Sqlmock
+	DB   *sql.DB
 }
 
 func (s *UserTestSuite) SetupSuite() {
@@ -58,7 +56,8 @@ func (s *UserTestSuite) SetupSuite() {
 }
 
 func (s *UserTestSuite) SeedMockUserData() *model.User {
-	user := s.User
+	user := &model.User{}
+
 	user.ID = gofakeit.UUID()
 	user.Username = gofakeit.Username()
 	user.FirstName = gofakeit.FirstName()
@@ -66,14 +65,7 @@ func (s *UserTestSuite) SeedMockUserData() *model.User {
 	user.Email = gofakeit.Email()
 	user.DateOfBirth = gofakeit.Date().Format("01/02/2006")
 
-	return &user
-}
-
-func (s *UserTestSuite) SeedMockUserListData() {
-	for i := 0; i < 10; i++ {
-		user := s.SeedMockUserData()
-		s.UserList = append(s.UserList, user)
-	}
+	return user
 }
 
 func TestRunUserTestSuite(t *testing.T) {
