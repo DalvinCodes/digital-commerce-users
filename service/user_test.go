@@ -154,3 +154,18 @@ func (s *UserServiceTestSuite) TestUserService_UpdateEmail() {
 	// Then
 	s.Require().Empty(err)
 }
+
+func (s *UserServiceTestSuite) TestUserService_UpdatePassword() {
+	// Given
+	mockUser := &model.User{ID: utils.UUIDv4(), Password: "TestPassword"}
+
+	// When
+	s.Repo.On("Update", context.Background(), mockUser).
+		Return(nil).
+		Once()
+
+	err := s.Service.UpdatePassword(context.Background(), mockUser.ID, mockUser.Password)
+
+	// Then
+	s.Require().NoError(err)
+}

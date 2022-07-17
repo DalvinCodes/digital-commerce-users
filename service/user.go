@@ -16,6 +16,7 @@ type UserServiceI interface {
 	Update(ctx context.Context, user *model.User) error
 	UpdateUsername(ctx context.Context, userID, username string) error
 	UpdateEmail(ctx context.Context, userID, email string) error
+	UpdatePassword(ctx context.Context, userID, password string) error
 }
 
 type UserService struct {
@@ -68,6 +69,15 @@ func (s *UserService) UpdateEmail(ctx context.Context, userID, email string) err
 
 	user.ID = userID
 	user.Email = email
+
+	return s.Repo.Update(ctx, user)
+}
+
+func (s *UserService) UpdatePassword(ctx context.Context, userID, password string) error {
+	user := &model.User{}
+
+	user.ID = userID
+	user.Password = password
 
 	return s.Repo.Update(ctx, user)
 }
