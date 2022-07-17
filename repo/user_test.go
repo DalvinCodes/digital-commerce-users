@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/DalvinCodes/digital-commerce/users/model"
+	"github.com/gofiber/fiber/v2/utils"
 	"gorm.io/gorm"
 	"regexp"
 )
@@ -24,14 +25,14 @@ func (s *UserTestSuite) TestUserRepo_NewRepository() {
 func (s *UserTestSuite) TestUserRepo_Create() {
 	// Given
 	user := s.SeedMockUserData()
-	const userQuery = `INSERT INTO "users" ("id","username","first_name","last_name","email","dob","created_at","updated_at","deleted_at") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING "id"`
+	const userQuery = `INSERT INTO "users" ("id","username","first_name","password","last_name","email","dob","created_at","updated_at","deleted_at") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING "id"`
 
 	rows := s.Mock.NewRows([]string{"id"}).AddRow(user.ID)
 
 	// When
 	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).
 		WithArgs(
-			user.ID, user.Username, user.FirstName,
+			user.ID, user.Username, user.FirstName, user.Password,
 			user.LastName, user.Email, user.DateOfBirth,
 			sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).WillReturnRows(rows)
 
@@ -94,8 +95,8 @@ func (s *UserTestSuite) TestUserRepo_FindByID() {
 	const userQuery = `SELECT * FROM "users" WHERE id = $1`
 	mockUser := s.SeedMockUserData()
 
-	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "last_name", "email", "dob"}).
-		AddRow(mockUser.ID, mockUser.Username, mockUser.FirstName, mockUser.LastName, mockUser.Email, mockUser.DateOfBirth)
+	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "password", "last_name", "email", "dob"}).
+		AddRow(mockUser.ID, mockUser.Username, mockUser.FirstName, mockUser.Password, mockUser.LastName, mockUser.Email, mockUser.DateOfBirth)
 
 	// When
 	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).
@@ -132,13 +133,13 @@ func (s *UserTestSuite) TestUserRepo_FindByID_ReturnsError() {
 
 func (s *UserTestSuite) TestUserRepo_Update() {
 	// Given
-	const userQuery = `UPDATE "users" SET "username"=$1,"first_name"=$2,"last_name"=$3,"email"=$4,"dob"=$5,"updated_at"=$6 WHERE "users"."deleted_at" IS NULL AND "id" = $7`
+	const userQuery = `UPDATE "users" SET "username"=$1,"first_name"=$2,"password"=$3,"last_name"=$4,"email"=$5,"dob"=$6,"updated_at"=$7 WHERE "users"."deleted_at" IS NULL AND "id" = $8`
 	user := s.SeedMockUserData()
 
 	// When
 	s.Mock.ExpectExec(regexp.QuoteMeta(userQuery)).
 		WithArgs(
-			user.Username, user.FirstName, user.LastName,
+			user.Username, user.FirstName, user.Password, user.LastName,
 			user.Email, user.DateOfBirth, sqlmock.AnyArg(), user.ID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
@@ -152,7 +153,7 @@ func (s *UserTestSuite) TestUserRepo_Update() {
 
 func (s *UserTestSuite) TestUserRepo_Delete() {
 	// Given
-	user := s.SeedMockUserData()
+	user := &model.User{ID: utils.UUIDv4()}
 	deleteUserQuery := `UPDATE "users" SET "deleted_at"=$1 WHERE "users"."id" = $2 AND "users"."deleted_at" IS NULL`
 
 	// When
@@ -194,8 +195,8 @@ func (s *UserTestSuite) TestUserRepo_FindByUsername() {
 	const userQuery = `SELECT * FROM "users" WHERE username = $1 AND "users"."deleted_at" IS NULL`
 	user := s.SeedMockUserData()
 
-	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "last_name", "email", "dob"}).
-		AddRow(user.ID, user.Username, user.FirstName, user.LastName, user.Email, user.DateOfBirth)
+	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "password", "last_name", "email", "dob"}).
+		AddRow(user.ID, user.Username, user.FirstName, user.Password, user.LastName, user.Email, user.DateOfBirth)
 
 	// When
 	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).
@@ -235,8 +236,8 @@ func (s *UserTestSuite) TestUserRepo_FindByEmail() {
 	const userQuery = `SELECT * FROM "users" WHERE email = $1 AND "users"."deleted_at" IS NULL`
 	user := s.SeedMockUserData()
 
-	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "last_name", "email", "dob"}).
-		AddRow(user.ID, user.Username, user.FirstName, user.LastName, user.Email, user.DateOfBirth)
+	rows := s.Mock.NewRows([]string{"id", "username", "first_name", "password", "last_name", "email", "dob"}).
+		AddRow(user.ID, user.Username, user.FirstName, user.Password, user.LastName, user.Email, user.DateOfBirth)
 
 	// When
 	s.Mock.ExpectQuery(regexp.QuoteMeta(userQuery)).

@@ -62,6 +62,7 @@ func (s *UserTestSuite) SeedMockUserData() *model.User {
 	user.Username = gofakeit.Username()
 	user.FirstName = gofakeit.FirstName()
 	user.LastName = gofakeit.LastName()
+	user.Password = gofakeit.Password(true, true, true, true, false, 16)
 	user.Email = gofakeit.Email()
 	user.DateOfBirth = gofakeit.Date().Format("01/02/2006")
 
