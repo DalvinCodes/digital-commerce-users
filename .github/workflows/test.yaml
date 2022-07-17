@@ -46,13 +46,14 @@ jobs:
 
       - name: Install Dependencies
         run: go get .
-#
+
       - name: Download Test Results
         uses: actions/download-artifact@v3
         with:
           name: Test Results
-      #      - name: Scan Dependencies for Vulnerabilities
-#        uses: actions/dependency-review-action@v1
+
+      - name: Scan Dependencies for Vulnerabilities
+        uses: actions/dependency-review-action@v1
 
 #      Run DevSkim for Vulnerabilities - https://github.com/Microsoft/DevSkim
       - name: Run DevSkim scanner
