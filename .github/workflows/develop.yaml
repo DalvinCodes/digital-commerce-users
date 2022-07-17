@@ -10,4 +10,4 @@ on:
 
 jobs:
   Test:
-    uses: ./github/workflows/test.yaml@main
+    uses: ./.github/workflows/test.yaml@main
