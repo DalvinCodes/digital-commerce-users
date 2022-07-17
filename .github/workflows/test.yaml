@@ -23,6 +23,14 @@ jobs:
       - name: Run GO Tests
         run: go test ./... -json > test-report.json -v -coverprofile=coverage.out
 
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test Results
+          path: |
+            test-report.json
+            coverage.out
+
 
   security:
     runs-on: ubuntu-22.04
@@ -39,7 +47,11 @@ jobs:
       - name: Install Dependencies
         run: go get .
 #
-#      - name: Scan Dependencies for Vulnerabilities
+      - name: Upload Test Results
+        uses: actions/download-artifact@v3
+        with:
+          name: Test Results
+      #      - name: Scan Dependencies for Vulnerabilities
 #        uses: actions/dependency-review-action@v1
 
 #      Run DevSkim for Vulnerabilities - https://github.com/Microsoft/DevSkim
