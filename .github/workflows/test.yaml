@@ -47,7 +47,7 @@ jobs:
       - name: Install Dependencies
         run: go get .
 #
-      - name: Upload Test Results
+      - name: Download Test Results
         uses: actions/download-artifact@v3
         with:
           name: Test Results
