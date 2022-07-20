@@ -5,3 +5,4 @@
 postgres-data
 *.json
 repo/user_test/mock_user_test_data.txt
+ErrorBlocks.txt
