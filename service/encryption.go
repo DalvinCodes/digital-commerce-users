@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/DalvinCodes/digital-commerce/users/config"
 	"github.com/DalvinCodes/digital-commerce/users/pkg"
 	"go.uber.org/zap"
 )
@@ -14,7 +15,7 @@ type EncryptionService struct {
 	EncryptionI EncryptionI
 }
 
-var encryptionCost = 14
+var encryptionCost = config.Vars.Server.Encryption
 
 var logger = zap.L()
 

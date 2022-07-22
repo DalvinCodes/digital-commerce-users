@@ -7,16 +7,27 @@ import (
 )
 
 type UserServiceI interface {
-	Create(ctx context.Context, user *model.User) error
-	Delete(ctx context.Context, user *model.User) error
+	UserFinder
+	UserGenerator
+	UserGenerator
+}
+
+type UserFinder interface {
 	FindByID(ctx context.Context, id string) (*model.User, error)
 	FindByUsername(ctx context.Context, username string) (*model.User, error)
 	FindByEmail(ctx context.Context, email string) (*model.User, error)
-	ListAll(ctx context.Context) ([]*model.User, error)
+}
+
+type UserUpdater interface {
 	Update(ctx context.Context, user *model.User) error
 	UpdateUsername(ctx context.Context, userID, username string) error
 	UpdateEmail(ctx context.Context, userID, email string) error
 	UpdatePassword(ctx context.Context, userID, password string) error
+}
+
+type UserGenerator interface {
+	Create(ctx context.Context, user *model.User) error
+	Delete(ctx context.Context, user *model.User) error
 }
 
 type UserService struct {

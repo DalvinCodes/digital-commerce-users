@@ -10,10 +10,12 @@ type Configurations struct {
 	Postgres UsersDB      `mapstructure:"postgres"`
 }
 
-const FileName = "api-user-v1.yaml"
+var Vars *Configurations
+
+const fileName = "api-user-v1.yaml"
 
 func LoadConfigs() *Configurations {
-	v, err := initConfig(FileName)
+	v, err := initConfig(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}

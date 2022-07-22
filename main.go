@@ -7,11 +7,12 @@ import (
 	"log"
 )
 
-var Configurations = config.LoadConfigs()
-
 func main() {
-	database := config.NewUsersDatabase(Configurations)
+
+	config.Vars = config.LoadConfigs()
+
+	database := config.NewUsersDatabase(config.Vars)
 	repo.NewUserRepository(database)
 	server := fiber.New()
-	log.Fatal(server.Listen(Configurations.Server.Port))
+	log.Fatal(server.Listen(config.Vars.Server.Port))
 }
